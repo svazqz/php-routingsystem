@@ -22,11 +22,7 @@
 
 			//Index
 
-			$default = new reservacionesController();
-
-			$default->baseName = "reservaciones";
-
-			$default->index();
+			
 
 			break;
 

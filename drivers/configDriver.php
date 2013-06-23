@@ -5,10 +5,10 @@ class configDriver
 	static private $instance = null;
 	
 	static private $database = array(
-		"host" => "MVPGolden.db.5245242.hostedresource.com",
-		"username" => "MVPGolden",
-		"password" => "MVPGold3n!",
-		"database" => "MVPGolden"
+		"host" => "",
+		"username" => "",
+		"password" => "",
+		"database" => ""
 	);
 	
 	static private $autoloaders = array(
