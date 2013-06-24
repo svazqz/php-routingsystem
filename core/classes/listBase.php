@@ -6,22 +6,15 @@ class listBase
 
 {
 
-	static $lists = array(
+	var $values;
 
-		"destinos" => array("MTY - APTO", "MTY - APTO", "APTO - MTY"),
+ 	public function __construct($v = null){
+ 		$this->values = $v;
+ 	}
 
-		"vehiculos" => array("Camioneta", "Automovil")
-
-	);
-
-	
-
-	public static function getValue($list, $key)
-
+	public function getValue($key)
 	{
-
-		return self::$lists[$list][$key];
-
+		return $this->values[$key];
 	}
 
 }
