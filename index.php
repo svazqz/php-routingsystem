@@ -1,15 +1,20 @@
 <?php
 
-	include 'drivers/bootstrapper.php';
+	include 'core/bootstrapper.php';
 
 	
 
-	bootstrapper::initApp();
+	bootstrapper::init();
 
 	
+	/*echo "<pre>";
+	print_r($_SERVER);
+	echo "</pre>";*/
 
-	$components = explode("/", substr($_SERVER['ORIG_PATH_INFO'], 1));
-
+	if(isset($_SERVER['ORIG_PATH_INFO']))
+		$components = explode("/", substr($_SERVER['ORIG_PATH_INFO'], 1));
+	else
+		$components = explode("/", substr($_SERVER['PATH_INFO'], 1));
 	
 
 	if($components[0] == "") $components = null;
@@ -129,10 +134,3 @@
 			break;
 
 	}
-
-	
-
-	
-
-?>
-
