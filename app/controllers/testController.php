@@ -7,4 +7,9 @@ class testController extends controllerBase
 	{
 		echo "working!!!";
 	}
+
+	public function getVar($v)
+	{
+		echo $v;
+	}
 }
