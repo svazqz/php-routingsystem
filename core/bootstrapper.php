@@ -7,24 +7,16 @@ class bootstrapper
 
 {
 
-	public static $loader;
+    public static $loader;
+    private static $paths = array(
+        "controller" => "app/controllers",
+        "view" => "app/views",
+        "base" => "core/classes",
+        "driver" => "core/drivers"
+    );
 
     public static function init()
     {
-    	
-
-		$paths = array(
-			"core" => array("classes" => "base", "drivers" => "driver"),
-			"app" => array("controllers" => "c", "views" => "v", "models" => "m", "lists" => "l")
-		);
-		
-		foreach ($paths as $main => $folders) {
-			foreach ($folders as $folder => $extensions) {
-				set_include_path(get_include_path().PS.$main.DS.$folder.DS);
-			}
-			
-		}
-		spl_autoload_extensions('.php');
         if (self::$loader == NULL)
             self::$loader = new self();
 
@@ -38,7 +30,27 @@ class bootstrapper
 
     public function load($class)
     {
-        spl_autoload($class);
+        $path = "";
+        if(array_key_exists($class, self::$paths))
+        {
+            $path = $paths[$class];
+        }
+        else
+        {
+            $parts = preg_split('/(?=[A-Z])/', $class, -1, PREG_SPLIT_NO_EMPTY);
+            $path = self::$paths[strtolower($parts[count($parts)-1])];
+        }
+        $path = $path.DS.$class.".php";
+        if(file_exists($path))
+        {
+            include($path);
+            spl_autoload($class, spl_autoload_extensions());
+        }
+        else
+        {
+            return false;
+        }
+        
     }
 
 }
