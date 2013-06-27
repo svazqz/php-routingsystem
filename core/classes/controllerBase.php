@@ -78,7 +78,8 @@ class controllerBase
 				}
 				else
 				{
-					$this->$components[1]();
+					$method = $this->components[1];
+					$this->$method();
 				}
 
 			} else{
