@@ -3,24 +3,17 @@
 class configDriver
 {
 	static private $instance = null;
-	
+	static private $dbtype = "mysql";
 	static private $database = array(
-		"host" => "",
-		"username" => "",
-		"password" => "",
-		"database" => ""
+		"mysql" => array(
+			"host" => "",
+			"username" => "",
+			"password" => "",
+			"database" => ""
+		)
 	);
 	
-	static private $autoloaders = array(
-			"drivers" => array("unload" => "bootstrapper.php,configDriver.php"),
-			"base" => array("unload" => ""),
-			"controllers" => array("unload" => ""),
-			"models" => array("unload" => ""),
-			"views" => array("unload" => "")
-	);
-	
-	static private $mail = array("method" => "mail", 
-									"data" => array());
+	static private $mail = array("method" => "mail", "data" => array());
 	
 	private function __construct()
 	{
@@ -40,11 +33,12 @@ class configDriver
 	public static function getDBConfig()
 	{
 		$dbObj = new stdClass();
+		$dbObj->type = self::$dbtype;
+
+		foreach (self::$database[self::$dbtype] as $key => $value) {
+			$dbObj->$key = $value;
+		}
 		
-		$dbObj->username = self::$database['username'];
-		$dbObj->host = self::$database['host'];
-		$dbObj->password = self::$database['password'];
-		$dbObj->database = self::$database['database'];
 		return $dbObj;
 	}
 	
