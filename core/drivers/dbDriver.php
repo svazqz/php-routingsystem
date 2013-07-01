@@ -1,25 +1,12 @@
 <?php
 
 
-class dbDriver
+class dbDriver extends driverBase
 {
 	private $n = 0;
 	private static $instance = null;
 	private static $dbm = null;
-
-	private function __construct()
-	{
-		//Constructor generico
-	}
-
-	public static function getInstance()
-	{
-		if (  !self::$instance instanceof self)
-		{
-			self::$instance = new self;
-		}
-		return self::$instance;
-	}
+	
 
 	private static function start()
 	{
