@@ -51,9 +51,18 @@ class dbDriver extends driverBase
 	{
 		if(!self::$dbm) self::start();
 		if(!$query) return;
-		self::$dbm->beginTransaction();
-		self::$dbm->exec($query);
-		self::$dbm->commit();
+		try
+		{
+			self::$dbm->beginTransaction();
+			self::$dbm->exec($query);
+			self::$dbm->commit();
+		}
+		catch(PDOException $e)
+	    {
+	    	echo "<pre>";
+	    	print_r($e);
+	    	echo "</pre>";
+	    }
 	}
 	
 	public static function execQueryObject($query = null, $lo = false)
