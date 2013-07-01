@@ -47,7 +47,7 @@ class dbDriver extends driverBase
 		self::$dbm = null;
 	}
 	
-	public function execQuery($query = null)
+	public static function execQuery($query = null)
 	{
 		if(!self::$dbm) self::start();
 		if(!$query) return;
@@ -56,7 +56,7 @@ class dbDriver extends driverBase
 		self::$dbm->commit();
 	}
 	
-	public function execQueryObject($query = null, $lo = false)
+	public static function execQueryObject($query = null, $lo = false)
 	{
 		if(!self::$connection) self::start();
 		if(!$query) return;
