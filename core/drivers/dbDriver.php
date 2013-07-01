@@ -100,9 +100,5 @@ class dbDriver
 		
 	}
 
-	public static function execQueryValue($query = null){
-
-	}
-
 }
 
