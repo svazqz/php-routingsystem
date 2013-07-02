@@ -11,10 +11,16 @@ class controllerBase
 	public function __construct()
 	{
 		if(isset($_SERVER['ORIG_PATH_INFO']))
-			$this->components = explode("/", substr($_SERVER['ORIG_PATH_INFO'], 1));
+			$this->components = substr($_SERVER['ORIG_PATH_INFO'], 1);
 		else
-			$this->components = explode("/", substr($_SERVER['PATH_INFO'], 1));
-		$this->basename = strtolower($this->components[0]);
+			$this->components = substr($_SERVER['PATH_INFO'], 1);
+		
+		if( strrpos($this->components, "/") == ( strlen($this->components)-1 ) )
+			$this->components = substr_replace($this->components, '', (strlen($this->components)-2));
+		
+		$this->components = explode("/", $this->components);
+		
+		$this->baseName = strtolower($this->components[0]);
 
 	}
 
@@ -38,7 +44,7 @@ class controllerBase
 
 		{
 
-			echo "No existe la vista especificada.";
+			echo "No existe la vista especificada. {$this->baseName}";
 
 			exit;
 
@@ -57,10 +63,10 @@ class controllerBase
 					$i = 2;
 
 					$p = array();
-
+					
 					while(isset($this->components[$i]))
 					{
-
+						
 						$p[] = $this->components[$i];
 
 						$i++;
