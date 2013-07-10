@@ -5,8 +5,6 @@
 class controllerBase
 
 {
-
-	var $baseName = null;
 	var $components = null;
 	public function __construct()
 	{
@@ -16,11 +14,9 @@ class controllerBase
 			$this->components = substr($_SERVER['PATH_INFO'], 1);
 		
 		if( strrpos($this->components, "/") == ( strlen($this->components)-1 ) )
-			$this->components = substr_replace($this->components, '', (strlen($this->components)-2));
+			$this->components = substr_replace($this->components, '', (strlen($this->components)-1));
 		
 		$this->components = explode("/", $this->components);
-		
-		$this->baseName = strtolower($this->components[0]);
 
 	}
 
@@ -28,7 +24,7 @@ class controllerBase
 
 	{
 
-		$view = $this->baseName."View";
+		$view = str_replace("Controller", "View", get_class($this));
 
 		if (class_exists($view)) 
 
@@ -44,7 +40,7 @@ class controllerBase
 
 		{
 
-			echo "No existe la vista especificada. {$this->baseName}";
+			echo "No existe la vista especificada.";
 
 			exit;
 
@@ -104,4 +100,3 @@ class controllerBase
 	}
 
 }
-
