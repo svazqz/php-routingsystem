@@ -4,6 +4,7 @@ class configDriver extends driverBase
 {
 	static private $instance = null;
 	static private $dbtype = "mysql";
+	static private $view = "main.default";
 	static private $database = array(
 		"mysql" => array(
 			"host" => "",
@@ -40,6 +41,10 @@ class configDriver extends driverBase
 	public function __clone()
 	{
 		trigger_error('Clone no se permite.', E_USER_ERROR);
+	}
+
+	public function defaultView(){
+		return self::$view;
 	}
 	
 }

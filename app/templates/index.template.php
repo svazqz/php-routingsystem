@@ -1,9 +1,9 @@
 <!DOCTYPE HTML>
 <html>
   <head>
-    <title>{titulo}</title>
+    <title></title>
   </head>
   <body>
-
+  	
   </body>
 </html>

@@ -1,35 +1,16 @@
 <?php
 
 class viewBase {
-	public function dispatchMessageXML($str = null) {
-		//$str = utf8_encode($str);
-		header('Content-type: text/xml');
-		echo '<?xml version="1.0" encoding="UTF-8" ?>';
-		echo "<Message>";
-        echo "<mensaje value='{$str}' />";
-        echo "</Message>";
-		exit;
+
+	function __construct() {
+		header('Content-Type: text/html; charset=utf-8');
 	}
 
-	public function dispatchMessageXMLfacebook($id,$token) {
-		//$str = utf8_encode($str);
-		header('Content-type: text/xml');
-		echo '<?xml version="1.0" encoding="UTF-8" ?>';
-		echo "<Message>";
-        echo "<mensaje value='Información actualizada correctamente' />";
-        echo "</Message>";
-		exit;
+	public static function Template($template = null, $data = null) {
+		templateDriver::setData($data);
+		if($template)
+			templateDriver::setSection($template);
+		include("app/templates/index.template.php");
 	}
-	
-	public function dispatchErrorXML($str = null) {
-		//$str = utf8_encode($str);
-		header('Content-type: text/xml');
-		echo '<?xml version="1.0" encoding="UTF-8" ?>';
-		echo "<Message>";
-        echo "<error value='{$str}' />";
-        echo "</Message>";
-		exit;
-	}
-	
 	
 }

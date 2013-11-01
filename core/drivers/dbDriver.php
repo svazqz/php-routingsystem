@@ -1,8 +1,6 @@
 <?php
 
-
-class dbDriver extends driverBase
-{
+class dbDriver extends driverBase {
 	private $n = 0;
 	private static $instance = null;
 	private static $dbm = null;
