@@ -1,14 +1,9 @@
 <?php
-	ini_set('display_errors','Off');
+	ini_set('display_errors','On');
 	include '../core/bootstrapper.php';
-
 
 	bootstrapper::init();
 
-	
-	/*echo "<pre>";
-	print_r($_SERVER);
-	echo "</pre>";*/
 	$components = array();
 	
 	if(isset($_SERVER['ORIG_PATH_INFO']))

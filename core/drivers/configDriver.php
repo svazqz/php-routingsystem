@@ -10,7 +10,7 @@ class configDriver extends driverBase
 			"host" => "localhost",
 			"username" => "root",
 			"password" => "",
-			"database" => "abc_system"
+			"database" => "course_system"
 		)
 	);
 	

@@ -22,15 +22,16 @@ class bootstrapper {
 
     public function __construct() {
         spl_autoload_register(array($this,'load'));
+        $this->loadVendors();
     }
     
-    public function loadVendors() {
+    private function loadVendors() {
         //ActiveRecord PHP
-        require_once 'php-activerecord/ActiveRecord.php';
-        $cdb = configDriver::getDBConfig();
+        require_once '../vendors/php-activerecord/ActiveRecord.php';
         
         ActiveRecord\Config::initialize(function($cfg) {
             $cfg->set_model_directory('../app/models');
+            $cdb = configDriver::getDBConfig();
             $cfg->set_connections( array(
                     'development' => "mysql://{$cdb->username}:{$cdb->password}@{$cdb->host}/{$cdb->database}"
                 )
@@ -46,7 +47,7 @@ class bootstrapper {
             $parts = preg_split('/(?=[A-Z])/', $class, -1, PREG_SPLIT_NO_EMPTY);
             $path = self::$paths[strtolower($parts[count($parts)-1])];
         }
-        $path = $path.DS.$class.".php";
+        $path = "../".$path.DS.$class.".php";
         if(file_exists($path)) {
             include($path);
             spl_autoload($class, spl_autoload_extensions());
