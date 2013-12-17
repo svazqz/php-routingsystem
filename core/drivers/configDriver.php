@@ -7,10 +7,10 @@ class configDriver extends driverBase
 	static private $view = "main.default";
 	static private $database = array(
 		"mysql" => array(
-			"host" => "",
-			"username" => "",
+			"host" => "localhost",
+			"username" => "root",
 			"password" => "",
-			"database" => ""
+			"database" => "abc_system"
 		)
 	);
 	
@@ -43,7 +43,7 @@ class configDriver extends driverBase
 		trigger_error('Clone no se permite.', E_USER_ERROR);
 	}
 
-	public function defaultView(){
+	public static function defaultView(){
 		return self::$view;
 	}
 	

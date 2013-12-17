@@ -2,15 +2,25 @@
 
 class templateDriver extends driverBase{
 	
-	static $section = null;
+	static $content = null;
 	static $data = null;
 
-	public static function setSection($sect = null, $data = null){
-		self::$section = "app/templates";
+	public static function displaySection($sect = null, $data = null){
+		$section = "app/templates";
+
 		foreach (explode('.', $sect) as $value) {
-			self::$section = self::$section . "/" . $value;
+			$section = $section . "/" . $value;
 		}
-		self::$section = self::$section.".template.php";
+		$section = $section.".template.php";
+		include($section);
+	}
+
+	public static function content() {
+		self::displaySection(self::$content);
+	}
+
+	public static function setContent($content) {
+		self::$content = $content;
 	}
 
 	public static function setData($d) {
@@ -19,11 +29,5 @@ class templateDriver extends driverBase{
 
 	public static function getData() {
 		return self::$data;
-	}
-
-	public static function section(){
-		if(!self::$section)
-			self::setSection(configDriver::defaultView());
-		include(self::$section);
 	}
 }

@@ -2,8 +2,12 @@
 
 class sessionDriver extends driverBase {
 
+	private static $usr = null;
+
 	public static function started() {
-		session_start();
+		if (session_status() == PHP_SESSION_NONE) {
+		    session_start();
+		}
 		if (isset($_SESSION['logged']) && $_SESSION['logged'] == true)
 			return true;
 
@@ -13,19 +17,31 @@ class sessionDriver extends driverBase {
 	public static function start($user = null, $pass = null) {
 		session_start();
 		if (self::started())
-			return null;
+			return $_SESSION['user'];
 		if (!$user || !$pass) {
-			return "Debes especificar tu usuario o tu contraseña";
+			return false;
 		} else {
 			//ToDo replace QUERY with query selector of user in database
-			$usuario = dbDriver::execQueryObject("QUERY");
-			if (!$usuario) {
-				return "Usuario y/o contraseña incorrectos";
+			self::$usr = dbDriver::execQueryObject("SELECT id,name,email,type FROM users WHERE username='".$user."' AND password='".md5($pass)."' LIMIT 1");
+			if (!self::$usr) {
+				session_destroy();
+				return false;
 			} else {
-				return $usuario;
+				$datetime = date("Y-m-d H:i:s");
+				dbDriver::execQuery("UPDATE users SET login=1,last_login='{$datetime}' WHERE username='".$user."'");
+				$_SESSION['logged'] = true;
+				self::$usr->login = $datetime;
+				$_SESSION['user'] = self::$usr;
+				return self::$usr;
 			}
 		}
+	}
 
+	public static function getUser() {
+		if (self::started())
+			return $_SESSION['user'];
+		else
+			return false;
 	}
 
 	public static function close() {

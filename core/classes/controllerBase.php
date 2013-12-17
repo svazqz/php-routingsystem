@@ -37,8 +37,10 @@ class controllerBase {
 
 	}
 
-	public function execute() {
+	public function execute($comp = null) {
 
+		if($comp)
+			$this->components = $comp;
 		if(isset($this->components[1])) {
 
 			if(method_exists($this, $this->components[1])){

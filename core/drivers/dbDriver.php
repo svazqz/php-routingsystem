@@ -76,7 +76,7 @@ class dbDriver extends driverBase {
 		if(!self::$dbm) self::start();
 		if(!$table || !$data) return;
 		foreach ($data as $element) {
-			if(!isset($element[$k])){//Nuevo
+			if(!isset($element[$k]) || $element[$k] == ""){//Nuevo
 				$keys = implode(',', array_keys($element));
 				$values = "'".implode("', '", array_values($element))."'";
 				$query = "INSERT INTO {$table} ({$keys}) VALUES({$values})";
@@ -92,16 +92,18 @@ class dbDriver extends driverBase {
 				}
 				$query .= " WHERE {$k}='".$id."'";
 			}
+
 			try {
 				self::$dbm->beginTransaction();
 				self::$dbm->exec($query);
 				$return = self::$dbm->lastInsertId();
 				self::$dbm->commit();
 			} catch(PDOException $e) {
-		    	echo "<pre>";
+		    	/*echo "<pre>";
 		    	print_r($e);
-		    	echo "</pre>";
-		    	return false;
+		    	echo "</pre>";*/
+		    	//return false;
+		    	$return = $e->errorInfo;
 		    }
 		}
 		
@@ -114,7 +116,9 @@ class dbDriver extends driverBase {
 		if(!$query) return;
 		
 		try {
-			$rows = self::$dbm->query($query);
+			$rows = self::$dbm->prepare($query);
+			$rows->execute();
+			$rows = $rows->fetchAll(PDO::FETCH_ASSOC);
 			//$rows->setFetchMode(PDO::FETCH_ASSOC);
 			//$result = $rows->fetchAll();
 			//print_r($result);
