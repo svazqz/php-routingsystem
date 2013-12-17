@@ -6,7 +6,7 @@ class templateDriver extends driverBase{
 	static $data = null;
 
 	public static function displaySection($sect = null, $data = null){
-		$section = "app/templates";
+		$section = "../app/templates";
 
 		foreach (explode('.', $sect) as $value) {
 			$section = $section . "/" . $value;
