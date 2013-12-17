@@ -6,10 +6,10 @@ class templateDriver extends driverBase{
 	static $data = null;
 
 	public static function displaySection($sect = null, $data = null){
-		$section = "../app/templates";
+		$section = "..".DS."app".DS."templates";
 
 		foreach (explode('.', $sect) as $value) {
-			$section = $section . "/" . $value;
+			$section = $section . DS . $value;
 		}
 		$section = $section.".template.php";
 		include($section);
