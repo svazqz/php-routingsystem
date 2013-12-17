@@ -8,7 +8,7 @@ class viewBase {
 
 	public static function raw($page = null, $data = null) {
 		templateDriver::setData($data);
-		include("app/templates/".str_replace(".", '/', $page).".template.php");
+		include("../app/templates/".str_replace(".", '/', $page).".template.php");
 	}
 
 	public static function Template($template = null, $data = null) {
@@ -17,7 +17,7 @@ class viewBase {
 			templateDriver::setContent($template);
 		else
 			templateDriver::setContent(configDriver::defaultView());
-		include("app/templates/index.template.php");
+		include("../app/templates/index.template.php");
 	}
 	
 }
