@@ -8,9 +8,9 @@ class configDriver extends driverBase
 	static private $database = array(
 		"mysql" => array(
 			"host" => "localhost",
-			"username" => "root",
-			"password" => "",
-			"database" => "course_system"
+			"username" => "approot",
+			"password" => "4ppG0ld3n!",
+			"database" => "appgoldenv2"
 		)
 	);
 	

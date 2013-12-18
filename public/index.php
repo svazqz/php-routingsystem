@@ -1,5 +1,5 @@
 <?php
-	ini_set('display_errors','On');
+	ini_set('display_errors','Off');
 	include '../core/bootstrapper.php';
 
 	bootstrapper::init();
