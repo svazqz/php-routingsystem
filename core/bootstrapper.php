@@ -10,7 +10,8 @@ class bootstrapper {
         "controller" => "app/controllers",
         "view" => "app/views",
         "base" => "core/classes",
-        "driver" => "core/drivers"
+        "driver" => "core/drivers",
+        "handler" => "core/handlers",
     );
 
     public static function init() {

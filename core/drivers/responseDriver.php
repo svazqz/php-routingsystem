@@ -2,9 +2,9 @@
 
 class responseDriver extends driverBase {
 	
-	public static function __json_encode( $data ) { 
-		if (function_exists('json_encode'))
-			return json_encode($data);
+	public static function Json( $data ) { 
+            if (function_exists('json_encode'))
+                die(json_encode($data));
 	    if( is_array($data) || is_object($data) ) { 
 	        $islist = is_array($data) && ( empty($data) || array_keys($data) === range(0,count($data)-1) ); 
 	        
@@ -63,6 +63,27 @@ class responseDriver extends driverBase {
 	        # int, floats, bools, null 
 	        $json = strtolower(var_export( $data, true )); 
 	    } 
-	    return $json; 
+	    die($json); 
 	} 
+        
+        public function jsonError($error = '', $desc = '', $code = ''){
+            $error = array(
+                "error" => array(
+                    "text" => $error
+                    ),
+                "description" => $desc
+            );
+            if( $code != '' ){
+                $error['error']['code'] = $code;
+            }
+            self::Json($error);
+        }
+        
+        public function jsonMessage($title = '', $desc = ''){
+            $msg = array(
+                "title" => $title,
+                "description" => $desc
+            );
+            self::Json($msg);
+        }
 }
