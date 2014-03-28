@@ -4,13 +4,14 @@ class configDriver extends driverBase
 {
 	static private $instance = null;
 	static private $dbtype = "mysql";
-	static private $view = "main.default";
+        static private $controller = "systemuser";
+	static private $content = "systemuser.login";
 	static private $database = array(
 		"mysql" => array(
 			"host" => "localhost",
-			"username" => "approot",
-			"password" => "4ppG0ld3n!",
-			"database" => "appgoldenv2"
+			"username" => "root",
+			"password" => "",
+			"database" => ""
 		)
 	);
 	
@@ -43,8 +44,17 @@ class configDriver extends driverBase
 		trigger_error('Clone no se permite.', E_USER_ERROR);
 	}
 
-	public static function defaultView(){
-		return self::$view;
+        public static function defaultController(){
+		return self::$controller;
+	}
+        
+	public static function defaultContent(){
+		return self::$content;
+	}
+        
+        public static function setDefaultView($view = null){
+                if( !$view ) return false;
+		self::$view = $view;
 	}
 	
 }

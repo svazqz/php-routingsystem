@@ -2,6 +2,8 @@
 
 define("PS", PATH_SEPARATOR);
 define("DS", "/");
+define("__POST__", 1);
+define("__GET__", 2);
 
 class bootstrapper {
 

@@ -2,7 +2,13 @@
 
 class responseDriver extends driverBase {
 	
-	public static function Json( $data ) { 
+        public static $type = "D";
+        public static $title = null;
+        public static $description = null;
+        public static $code = null;
+        public static $data = null;
+        
+	private static function Json( $data ) { 
             if (function_exists('json_encode'))
                 die(json_encode($data));
 	    if( is_array($data) || is_object($data) ) { 
@@ -66,24 +72,53 @@ class responseDriver extends driverBase {
 	    die($json); 
 	} 
         
-        public function jsonError($error = '', $desc = '', $code = ''){
-            $error = array(
-                "error" => array(
-                    "text" => $error
-                    ),
-                "description" => $desc
-            );
-            if( $code != '' ){
-                $error['error']['code'] = $code;
+        private static function arrayToXml($arr) {
+            $xml = '';
+            foreach($arr  as $key => $val) {
+                if(!is_numeric($key))
+                    $xml .= "<{$key}>";
+                if( is_array($val) ) {
+                    $xml .= self::arrayToXml($val);
+                } else {
+                    $xml .= $val;
+                }
+                if(!is_numeric($key))
+                    $xml .= "</{$key}>";
             }
-            self::Json($error);
+            return $xml;
         }
         
-        public function jsonMessage($title = '', $desc = ''){
-            $msg = array(
-                "title" => $title,
-                "description" => $desc
-            );
-            self::Json($msg);
+        private static function xmlDispatcher(){
+            header('Content-type: text/xml');
+            $xml = '<?xml version="1.0" encoding="UTF-8" ?>';
+            $xml .= "<Message>";
+            $xml .= self::arrayToXml(self::$data);
+            $xml .= "</Message>";
+            die($xml);
+        }
+        
+        private static function jsonDispatcher(){
+            self::Json(self::$data);
+        }
+        
+        public static function dispatch($type = 'D', $title = '', $description = '') {
+            switch ($type) {
+                case 'D':
+                    self::$data = $title;
+                    break;
+                case 'M':
+                    self::$data = array("mensaje" => $title.":".$description);
+                    break;
+                case 'E':
+                    self::$data = array("error" => $title.":".$description);
+                    break;
+                default:
+                    break;
+            }
+            if(inputDriver::getVar("isMobile") !== null) {
+                self::xmlDispatcher();
+            } else {
+                self::jsonDispatcher();
+            }
         }
 }

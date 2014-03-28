@@ -15,7 +15,7 @@ class sessionDriver extends driverBase {
         session_start();
     }
     
-    private static function sessionInstance() {
+    public static function sessionInstance() {
         if( !self::$instance instanceof self ) {
             self::$instance = new self;
         }
@@ -58,31 +58,8 @@ class sessionDriver extends driverBase {
         if(isset($_SESSION[$session])) {
             return $_SESSION[$session];
         } 
-    }
-
-    public static function start($user = null, $pass = null) {
-        $s = self::sessionInstance();
-        if(isset($_SESSION['loggedin']))
-            if($_SESSION['loggedin'])
-                return true;
-        if(is_object($user)) {
-            
-        } elseif(is_array($user) ) {
-            $u = User::find_by_username($user['username']);
-            if(!$u) return false;
-            if($u->password == md5($user['password'])){
-                $_SESSION['loggedin'] = true;
-                return true;
-            }
-        } else {
-            $u = User::find_by_username($user['username']);
-            if(!$u) return false;
-            if($u->password == md5($pass)){
-                $_SESSION['loggedin'] = true;
-                return true;
-            }
-        }
-        return false;
+        
+        throw new Exception("Variable de session {$session} no existe.");
     }
 
     public static  function close() {
