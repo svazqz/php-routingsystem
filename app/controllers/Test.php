@@ -1,11 +1,12 @@
 <?php
 
-class testController extends controllerBase
+class TestController extends Base\Controller
 {
 	
 	public function index()
 	{
-		echo "working!!!";
+		
+		
 	}
 
 	public function getVar($v)

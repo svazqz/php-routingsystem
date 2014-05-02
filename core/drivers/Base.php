@@ -1,6 +1,6 @@
 <?php
-
-class driverBase
+namespace Driver;
+class Base
 {
 	private function __construct()
 	{

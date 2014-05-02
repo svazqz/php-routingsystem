@@ -1,13 +1,13 @@
 <?php
 
-class dbDriver extends driverBase {
+class DB extends Driver\Base {
 	private $n = 0;
 	private static $instance = null;
 	private static $dbm = null;
 	
 
 	private static function start() {
-		$cdb = configDriver::getDBConfig();
+		$cdb = Config::getDBConfig();
 		try {
 			switch ($cdb->type) {
 				case 'odbc':

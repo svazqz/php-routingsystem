@@ -1,6 +1,8 @@
 <?php
 
-class controllerBase {
+namespace Base;
+
+class Controller {
 
 	var $baseName = null;
 	var $components = null;
@@ -20,9 +22,7 @@ class controllerBase {
 	public function getView() {
 
 		$view = str_replace("Controller", "View", get_class($this));
-
 		if (class_exists($view)) {
-
 			$view = new $view();
 
 			return $view;

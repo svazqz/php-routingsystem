@@ -1,9 +1,10 @@
 <?php
 
-class authDriver extends driverBase {
+
+class Auth extends Driver\Base {
     
     public static function login($user = null, $pass = null) {
-        $s = sessionDriver::sessionInstance();
+        $s = Session::sessionInstance();
         if(isset($_SESSION['loggedin']))
             if($_SESSION['loggedin'])
                 return true;
@@ -30,7 +31,7 @@ class authDriver extends driverBase {
     }
     
     public static function logins($user = null, $pass = null) {
-        $s = sessionDriver::sessionInstance();
+        $s = Session::sessionInstance();
         if(isset($_SESSION['loggedin']))
             if($_SESSION['loggedin'])
                 return true;
@@ -57,7 +58,7 @@ class authDriver extends driverBase {
     }
     
     public static function getUser() {
-        if( sessionDriver::sessionExists('loggedin') ) {
+        if( Session::sessionExists('loggedin') ) {
             $u = User::find(sessionDriver::getSession('user_id'));
             return $u;
         }
@@ -65,7 +66,7 @@ class authDriver extends driverBase {
     }
     
     public static function getSUser() {
-        if( sessionDriver::sessionExists('loggedin') ) {
+        if( Session::sessionExists('loggedin') ) {
             $u = Systemuser::find(sessionDriver::getSession('user_id'));
             return $u;
         }
@@ -73,11 +74,11 @@ class authDriver extends driverBase {
     }
     
     public static function logout() {
-        sessionDriver::close();
+        Session::close();
     }
     
     public static function isLoggedin() {
-        if( sessionDriver::sessionExists('loggedin') ) {
+        if( Session::sessionExists('loggedin') ) {
             return true;
         }
         return false;
@@ -85,7 +86,7 @@ class authDriver extends driverBase {
     
     public static function chkLoggin() {
         return true;
-        if( !authDriver::isLoggedin() )
-            responseDriver::dispatch('E', 'No se ha iniciado sesión', 'No se ha iniciado sesión en el sistema');
+        if( !Auth::isLoggedin() )
+            Response::dispatch('E', 'No se ha iniciado sesión', 'No se ha iniciado sesión en el sistema');
     }
 }

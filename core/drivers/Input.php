@@ -1,6 +1,6 @@
 <?php
 
-class inputDriver extends driverBase {
+class Input extends Driver\Base {
     public static function getVar($name = null, $default = null, $type = null) {
         switch ($name) {
             case __POST__ :

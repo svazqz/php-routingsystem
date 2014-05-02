@@ -1,6 +1,6 @@
 <?php
 
-class sessionDriver extends driverBase {        
+class Session extends Driver\Base {        
     
     private static $instance;
     

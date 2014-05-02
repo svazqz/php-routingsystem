@@ -1,8 +1,9 @@
 <?php
-	ini_set('display_errors','Off');
+	ini_set('display_errors','On');
 	include '../core/bootstrapper.php';
+	$Bootstrapper = bootstrapper::boot();
 
-	bootstrapper::init();
+	$Bootstrapper->init();
 
 	$components = array();
 	
@@ -21,13 +22,12 @@
         } else {
             $controller = "main";
         }
-        $controller = strtolower($controller)."Controller";
+        $controller = ucfirst($controller)."Controller";
 	if (class_exists($controller)) {
 		$controller = new $controller();
 		$controller->execute();
 	} else {
 		echo "Controller {$controller} no existe.";
 	}
-
 
 

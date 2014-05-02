@@ -7,48 +7,61 @@ define("__GET__", 2);
 
 class bootstrapper {
 
-    public static $loader;
-    private static $paths = array(
-        "controller" => "app/controllers",
-        "view" => "app/views",
-        "base" => "core/classes",
-        "driver" => "core/drivers",
-        "handler" => "core/handlers",
+    public static $instance = null;
+
+    private static $Namespaces = array(
+        "Controller" => "app/controllers",
+        "View" => "app/views",
+        "Base" => "../core/bases",
+        "Driver" => "../core/drivers",
+        "Handler" => "handlers",
     );
 
-    public static function init() {
-        if (self::$loader == NULL)
-            self::$loader = new self();
-        
-        return self::$loader;
+    public function __construct() {}
+    
+    public static function boot() {
+
+        if (  !self::$instance instanceof self) {
+            self::$instance = new self;
+        }
+        return self::$instance;
     }
 
-    public function __construct() {
-        spl_autoload_register(array($this,'load'));
-        spl_autoload_register(array($this,'vendorALoader'));
+    public function init() {
+        spl_autoload_register(array($this,'autoLoader'));
         $this->loadVendors();
     }
-    
-    private function loadVendors() {
-        //ActiveRecord PHP
-        require_once '..'.DS.'vendors'.DS.'php-activerecord'.DS.'ActiveRecord.php';
-        ActiveRecord\Config::initialize(function($cfg) {
-            $cfg->set_model_directory('..'.DS.'app/models');
-            $cdb = configDriver::getDBConfig();
-            $cfg->set_connections( array(
-                    'development' => "mysql://{$cdb->username}:{$cdb->password}@{$cdb->host}/{$cdb->database}"
-                )
-            );
-        });
-        $this->vendorALoader("Whoops\Run");
-        $whoops = new Whoops\Run();
-        $whoops->pushHandler(new Whoops\Handler\PrettyPageHandler());
-        // Set Whoops as the default error and exception handler used by PHP:
-        $whoops->register(); 
+
+    public function autoLoader($className) {
+        $path = '';
+        
+        if ($lastNsPos = strrpos($className, '\\')) {
+            //Accessing core classes by Namespace under core folder
+            $namespace = substr($className, 0, $lastNsPos);
+            if(array_key_exists($namespace, self::$Namespaces)) {
+                $path .= self::$Namespaces[$namespace].DS.substr($className, $lastNsPos + 1).'.php';
+            }
+        } else {
+            //Accessing app classes by NameType
+            $parts = preg_split('/(?=[A-Z])/', $className, -1, PREG_SPLIT_NO_EMPTY);
+            $type = $parts[count($parts)-1];
+            //Is driver ??
+            $path = "..".DS."core".DS."drivers".DS.$parts[0].".php";
+            if(!file_exists($path)) {
+                $class = substr($className, 0, strrpos($className, $type));
+                $path = "..".DS.self::$Namespaces[$type].DS.$class.".php";
+            }
+        }
+        
+        if(file_exists($path)) {
+            require $path;
+        } else {
+            $this->vendorAutoLoader($className);
+        }
     }
 
-    public function vendorALoader($className){
-        $vendors = "../vendors/";
+    public function vendorAutoLoader($className) {
+        $vendorsPath = "..".DS."vendors".DS;
         $className = ltrim($className, '\\');
         $fileName  = '';
         $namespace = '';
@@ -59,27 +72,29 @@ class bootstrapper {
         }
         $fileName .= str_replace('_', DS, $className) . '.php';
         
-        if(file_exists($vendors.$fileName)) 
-            require $vendors.$fileName;
+        if(file_exists($vendorsPath.$fileName)) {
+            require $vendorsPath.$fileName;
+        } else {
+            throw new RuntimeException("The file: ".$fileName." does not exist! ");
+        }
+    }
+
+    private function loadVendors() {
+        //ActiveRecord PHP
+        require_once '..'.DS.'vendors'.DS.'ActiveRecord'.DS.'ActiveRecord.php';
+        ActiveRecord\Config::initialize(function($cfg) {
+            $cfg->set_model_directory('..'.DS.'app/models');
+            $cdb = Config::getDBConfig();
+            $cfg->set_connections( array(
+                    'development' => "mysql://{$cdb->username}:{$cdb->password}@{$cdb->host}/{$cdb->database}"
+                )
+            );
+        });
+        $whoops = new Whoops\Run();
+        $whoops->pushHandler(new Whoops\Handler\PrettyPageHandler());
+        $whoops->register(); 
     }
     
-    public function load($class) {
-        $path = "";
-        if(array_key_exists($class, self::$paths)) {
-            $path = $paths[$class];
-        } else {
-            $parts = preg_split('/(?=[A-Z])/', $class, -1, PREG_SPLIT_NO_EMPTY);
-            $path = self::$paths[strtolower($parts[count($parts)-1])];
-        }
-        $path = "..".DS.$path.DS.$class.".php";
-        if(file_exists($path)) {
-            include($path);
-            //spl_autoload($class, spl_autoload_extensions());
-        } else {
-            return false;
-        }
-        
-    }
 
 }
 

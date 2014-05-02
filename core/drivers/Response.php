@@ -1,6 +1,6 @@
 <?php
 
-class responseDriver extends driverBase {
+class Response extends Driver\Base {
 	
         public static $type = "D";
         public static $title = null;
@@ -115,7 +115,7 @@ class responseDriver extends driverBase {
                 default:
                     break;
             }
-            if(inputDriver::getVar("isMobile") !== null) {
+            if(Input::getVar("isMobile") !== null) {
                 self::xmlDispatcher();
             } else {
                 self::jsonDispatcher();
