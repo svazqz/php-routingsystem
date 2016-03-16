@@ -7,10 +7,11 @@ $whoops->pushHandler(new Whoops\Handler\PrettyPageHandler());
 $whoops->register();
 
 ActiveRecord\Config::initialize(function($cfg) {
+	$_cfg = Core\Drivers\Config::getInstance()->getDBConfig();
 	$cfg->set_model_directory(getcwd().'/app/models');
 	$cfg->set_connections( array(
-			
-		)
+				'development' => "{$_cfg->type}://{$_cfg->user}:{$_cfg->password}@{$_cfg->type}/{$_cfg->database}"
+			)
 	);
 });
 
@@ -25,7 +26,7 @@ if(count($components) > 2) {
 }
 
 $controller = ucfirst($controller);
-$controller = "App\\Controller\\".$controller;
+$controller = "App\\Controllers\\".$controller;
 
 try {
 	$controller = new $controller($method, $attrs);

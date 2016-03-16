@@ -1,15 +1,18 @@
 <?php
-class Config extends Driver\Base {
-	static private $instance = null;
-	static private $dbtype = "mysql";
-    static private $controller = "test";
-	static private $content = "main.default";
-	static private $database = array(
+namespace Core\Drivers;
+
+class Config {
+	
+	private static $instance = null;
+	private static $dbtype = "mysql";
+    private static $controller = "test";
+	private static $content = "main.default";
+	private static $database = array(
 		"mysql" => array(
 			"host" => "localhost",
-			"username" => "root",
+			"user" => "root",
 			"password" => "",
-			"database" => ""
+			"database" => "phprs"
 		)
 	);
 	
@@ -51,4 +54,13 @@ class Config extends Driver\Base {
 		self::$view = $view;
 	}
 	
+	public static function getInstance() 
+	{
+		if (!isset(self::$instance)) 
+		{ 
+			$c = __CLASS__;
+			self::$instance = new $c;
+		}
+		return self::$instance;
+	} 
 }
