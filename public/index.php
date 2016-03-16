@@ -10,16 +10,19 @@ ActiveRecord\Config::initialize(function($cfg) {
 	$_cfg = Core\Drivers\Config::getInstance()->getDBConfig();
 	$cfg->set_model_directory(getcwd().'/app/models');
 	$cfg->set_connections( array(
-				'development' => "{$_cfg->type}://{$_cfg->user}:{$_cfg->password}@{$_cfg->type}/{$_cfg->database}"
+				'development' => "{$_cfg->type}://{$_cfg->user}:{$_cfg->password}@{$_cfg->host}/{$_cfg->database}"
 			)
 	);
 });
 
+//Twig_Autoloader::register();
+
 $components = explode("/", $_SERVER['QUERY_STRING']);
 
-$controller = isset($components[0]) ? $components[0] : null;
+$controller = (isset($components[0]) && $components[0] != '') ? $components[0] : Core\Drivers\Config::getInstance()->defaultController();
 $method = isset($components[1]) ? $components[1] : null;
 $attrs = array();
+
 
 if(count($components) > 2) {
 	$attrs =  array_slice ($components, 2);

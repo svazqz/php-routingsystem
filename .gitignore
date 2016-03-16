@@ -3,3 +3,4 @@
 /app/models/Test.php
 /app/views/Test.php
 /app/templates/test
+/app/templates/cache

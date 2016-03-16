@@ -2,7 +2,6 @@
 namespace Core\Drivers;
 
 class Config {
-	
 	private static $instance = null;
 	private static $dbtype = "mysql";
     private static $controller = "test";
@@ -15,6 +14,12 @@ class Config {
 			"database" => "phprs"
 		)
 	);
+	
+	private function __construct() { }
+	
+	public function __clone() {
+		trigger_error('Clone no se permite.', E_USER_ERROR);
+	}
 	
 	static private $mail = array("method" => "mail", "data" => array());
 
@@ -37,9 +42,7 @@ class Config {
 		return self::$mail;
 	}
 	
-	public function __clone() {
-		trigger_error('Clone no se permite.', E_USER_ERROR);
-	}
+	
 
     public static function defaultController() {
 		return self::$controller;
