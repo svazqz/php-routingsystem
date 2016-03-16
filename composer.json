@@ -1,0 +1,16 @@
+{
+    "autoload": {
+        "psr-4": {
+            "Core\\": "core/",
+            "Core\\Handler\\": "core/handlers/",
+            "Core\\Driver\\": "core/drivers/",
+            "App\\Controller\\": "app/controllers",
+            "App\\View\\": "app/views"
+            
+        }
+    },
+    "require": {
+        "filp/whoops": "2.*",
+        "php-activerecord/php-activerecord": "1.1.2"
+    }
+}

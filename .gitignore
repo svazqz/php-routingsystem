@@ -1,0 +1,5 @@
+/vendor
+/app/controllers/Test.php
+/app/models/Test.php
+/app/views/Test.php
+/app/templates/test
