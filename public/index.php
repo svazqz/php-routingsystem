@@ -15,24 +15,32 @@ ActiveRecord\Config::initialize(function($cfg) {
 	);
 });
 
-//Twig_Autoloader::register();
+$URI = $_SERVER['REQUEST_URI'];
+$URI = parse_url('http://phproutingsystem.com'.$URI);
+$URI = str_replace("/index.php", "", $URI["path"]);
+$URI = str_replace("index.php", "", $URI);
+$URI = str_replace("/", " ", $URI);
+$URI = trim($URI);
 
-$components = explode("/", $_SERVER['QUERY_STRING']);
-
-$controller = (isset($components[0]) && $components[0] != '') ? $components[0] : Core\Drivers\Config::getInstance()->defaultController();
-$method = isset($components[1]) ? $components[1] : null;
-$attrs = array();
-
-
-if(count($components) > 2) {
-	$attrs =  array_slice ($components, 2);
+if(strlen($URI) > 0) {
+	$components = explode(" ", $URI);
+} else {
+	$components = array();
 }
 
-$controller = ucfirst($controller);
-$controller = "App\\Controllers\\".$controller;
-
-try {
-	$controller = new $controller($method, $attrs);
-} catch (Exeption $e) {
-	
+switch(count($components)) {
+	case 0:
+		$_classController = "App\\Controllers\\".ucfirst(Core\Drivers\Config::getInstance()->defaultController());
+		$controller = new $_classController(null);
+		break;
+	default:
+		$_classController = "App\\Controllers\\".ucfirst($components[0]);
+		if(class_exists($_classController)) {
+			$components = array_slice($components, 1);
+			$controller = new $_classController($components);
+		} else {
+			$_classController = "App\\Controllers\\".ucfirst(Core\Drivers\Config::getInstance()->defaultController());
+			$controller = new $_classController($components);
+		}
+		break;
 }
