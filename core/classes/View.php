@@ -14,7 +14,7 @@ abstract class View {
 
 	public function show($method, $data = null) {
 		if($data == null) {
-			$this->$method;
+			$this->$method();
 		} else {
 			call_user_func_array(array($this, $method), $data);
 		}
@@ -24,11 +24,11 @@ abstract class View {
 		$this->$method($data);
 	}
 
-	protected function render($viewLayout, $dataLayout, $viewFormat = "html") {
+	protected function render($viewLayout, $dataLayout = array(), $viewFormat = "html") {
 		$this->templateEngine->render(strtolower((new \ReflectionClass($this))->getShortName())."/".$viewLayout.".".$viewFormat, $dataLayout);
 	}
 
-	protected function renderExternal($externalSpace, $viewLayout, $dataLayout, $viewFormat = "html") {
+	protected function renderExternal($externalSpace, $viewLayout, $dataLayout = array(), $viewFormat = "html") {
 		$this->templateEngine->render(strtolower($externalSpace)."/".$viewLayout.".".$viewFormat, $dataLayout);
 	}
 

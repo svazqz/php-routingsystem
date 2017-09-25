@@ -3,7 +3,7 @@ namespace Core\Drivers;
 
 class Config {
 	private static $instance = null;
-	private static $controller = "test";
+	private static $controller = "home";
 
 	private static $dbtype = "mysql";
 	private static $database = array(
