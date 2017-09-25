@@ -1,35 +1,46 @@
 <?php
-	ini_set('display_errors','On');
-	include '../core/bootstrapper.php';
-	$Bootstrapper = bootstrapper::boot();
-	$Bootstrapper->init();
+chdir("..");
+$loader = require getcwd() . '/vendor/autoload.php';
+
+$whoops = new Whoops\Run();
+$whoops->pushHandler(new Whoops\Handler\PrettyPageHandler());
+$whoops->register();
+
+ActiveRecord\Config::initialize(function($cfg) {
+	$_cfg = Core\Drivers\Config::getInstance()->getDBConfig();
+	$cfg->set_model_directory(getcwd().'/app/models');
+	$cfg->set_connections( array(
+				'development' => "{$_cfg->type}://{$_cfg->user}:{$_cfg->password}@{$_cfg->host}/{$_cfg->database}"
+			)
+	);
+});
+
+$URI = $_SERVER['REQUEST_URI'];
+$URI = parse_url('http://phproutingsystem.com'.$URI);
+$URI = str_replace("/index.php", "", $URI["path"]);
+$URI = str_replace("index.php", "", $URI);
+$URI = str_replace("/", " ", $URI);
+$URI = trim($URI);
+
+if(strlen($URI) > 0) {
+	$components = explode(" ", $URI);
+} else {
 	$components = array();
-	
-	if(isset($_SERVER['ORIG_PATH_INFO'])) {
-		$components = explode("/", substr($_SERVER['ORIG_PATH_INFO'], 1));
-    } else {
-        if(isset ($_SERVER['PATH_INFO'])) {
-            $components = explode("/", substr($_SERVER['PATH_INFO'], 1));
-        } else {
-            if(isset($_SERVER['QUERY_STRING']) ) {
-                $components = explode("/", $_SERVER['QUERY_STRING']);
-            }
-        }
-    }
-	
-    if(isset($components[0])) {
-        if(trim($components[0]) == "") {
-                $controller = "main";
-        } else {
-            $controller = $components[0];
-        }
-    } else {
-        $controller = "main";
-    }
-    $controller = ucfirst($controller)."Controller";
-	if (class_exists($controller)) {
-		$controller = new $controller();
-		$controller->execute();
-	} else {
-		echo "Controller {$controller} no existe.";
-	}
+}
+
+switch(count($components)) {
+	case 0:
+		$_classController = "App\\Controllers\\".ucfirst(Core\Drivers\Config::getInstance()->defaultController());
+		$controller = new $_classController(null);
+		break;
+	default:
+		$_classController = "App\\Controllers\\".ucfirst($components[0]);
+		if(class_exists($_classController)) {
+			$components = array_slice($components, 1);
+			$controller = new $_classController($components);
+		} else {
+			$_classController = "App\\Controllers\\".ucfirst(Core\Drivers\Config::getInstance()->defaultController());
+			$controller = new $_classController($components);
+		}
+		break;
+}

@@ -1,69 +1,56 @@
 <?php
-class Template extends Driver\Base {
-    private static $type = 'html';
-    private static $content = null;
-    private static $data = array();
 
-    public static function setContent($content = null) {
-        if( $content === null )
-            return false;
-        self::$content = $content;
-    }
+namespace Core\Drivers;
 
-    public static function setData($k = null, $d = null) {
-        if($k === null)
-            return false;
-        self::$data[$k] = $d;
-    }
+use Core\Interfaces as Core;
 
-    public static function getData($k = null) {
-        if( $k === null )
-            return self::$data;
-        return isset(self::$data[$k]) ? self::$data[$k] : null;
-    }
-    
-    public static function render($content = false, $data = null, $template = 'index') {
-        if( $data )
-            self::setData("content", $data);
-        
-        Template::setContent($content ? $content : Config::defaultContent());
-        
-        if( file_exists("../app/templates/".$template.".template.php") ) 
-            include("../app/templates/".$template.".template.php");
-        else
-            die("No existe el template especificado");
-    }
-    
-    public static function content(){
-        self::renderSection(self::$content);
-    }
-    
-    public static function renderRaw($sect = null, $data = null){
-	   self::renderSection($sect, $data);
-    }
-    
-    public static function renderSection($sect = null, $data = null, $overwrite = true){
-        $section = "../app/templates";
-        $key = null;
-        foreach (explode('.', $sect) as $value) {
-            $section = $section . "/" . $value;
-            $key = $value;
+class Template implements Core\IDriver {
+
+    private static $instance = null;
+
+    private $loader = null;
+    private $twig = null;
+
+    private function __construct() {
+        $dirs = array_filter(glob(getcwd().'/app/templates/*'), 'is_dir');
+        $this->loader = new \Twig_Loader_Filesystem(getcwd().'/app/templates');
+        foreach($dirs as $d) {
+            $namespace = substr($d , (strrpos($d, "/")-strlen($d)+1));
+            if($namespace != "cache") {
+				$this->loader->addPath($d, $namespace);
+			}
         }
-        if( $data !== null ) {
-            if( !$overwrite ) {
-                $i = 2;
-                while(isset(self::$data[$key]))
-                    $key = $key.$i++;
+        $this->twig = new \Twig_Environment($this->loader);
+    }
+
+	public function __clone() {
+		trigger_error('Not allowed.', E_USER_ERROR);
+	}
+
+    public static function init() {
+		if (!isset(self::$instance)) {
+			$c = __CLASS__;
+			self::$instance = new $c;
+		}
+		return self::$instance;
+	}
+
+	public function render($template = null, $data = array()) {
+		if($template != null) {
+            $type = "text";
+            $ext = "";
+            $exti = strpos($template, ".");
+            if($exti !== false) {
+                $ext = substr($template, ($exti+1), strlen($template));
+                if($ext != "html") {
+                    $type = "application";
+                }
             }
-            self::setData($key, $data);
-        }
-        if( file_exists($section.".php") ) 
-            $section = $section.".php";
-        elseif (file_exists($section.".template.php"))
-            $section = $section.".template.php";
-        else
-            die("No existe la sección especificada");
-        include($section);
-    }
-    
+            header('Content-Type: '.$type.'/'.$ext.'; charset=utf-8');
+
+            $this->twig->display($template, $data);
+
+		}
+	}
+
 }

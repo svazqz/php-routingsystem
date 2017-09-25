@@ -4,7 +4,7 @@ class DB extends Driver\Base {
 	private $n = 0;
 	private static $instance = null;
 	private static $dbm = null;
-	
+
 
 	private static function start() {
 		$cdb = Config::getDBConfig();
@@ -28,18 +28,19 @@ class DB extends Driver\Base {
 					break;
 			}
 			self::$dbm->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-			self::$dbm->setAttribute(PDO::ATTR_PERSISTENT, true); 
+			self::$dbm->setAttribute(PDO::ATTR_PERSISTENT, true);
 			self::$dbm->query('SET NAMES utf8');
+			self::$dbm->query('SELECT convert(cast(convert(content using latin1) as binary) using utf8) AS content');
 		} catch(PDOException $e) {
 	    	echo $e->getMessage();
 	    }
-			
+
 	}
 
 	public static function close() {
 		self::$dbm = null;
 	}
-	
+
 	public static function execQuery($query = null) {
 		if(!self::$dbm) self::start();
 		if(!$query) return;
@@ -53,7 +54,7 @@ class DB extends Driver\Base {
 	    self::close();
 	    return true;
 	}
-	
+
 	public static function execQueryId($query = null) {
 		if(!self::$dbm) self::start();
 		if(!$query) return;
@@ -71,7 +72,7 @@ class DB extends Driver\Base {
 	    self::close();
 	    return $return;
 	}
-	
+
 	public static function tableInsert($table = null, $data = null, $k = 'id') {
 		if(!self::$dbm) self::start();
 		if(!$table || !$data) return;
@@ -106,15 +107,15 @@ class DB extends Driver\Base {
 		    	$return = $e->errorInfo;
 		    }
 		}
-		
+
 	    self::close();
 	    return $return;
 	}
-	
+
 	public static function execQueryObject($query = null, $lo = false) {
 		if(!self::$dbm) self::start();
 		if(!$query) return;
-		
+
 		try {
 			$rows = self::$dbm->prepare($query);
 			$rows->execute();
@@ -134,15 +135,14 @@ class DB extends Driver\Base {
 	        	if(count($return) == 1 && !$lo) $return = $return[0];
 	        	return $return;
 			}
-			
-			return null;	
-			
+
+			return null;
+
 		} catch (Exception $e) {
 			return mysql_error();
 		}
 		self::close();
-		
+
 	}
 
 }
-
