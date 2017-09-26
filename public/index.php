@@ -10,7 +10,7 @@ ActiveRecord\Config::initialize(function($cfg) {
 	$_cfg = Core\Drivers\Config::getInstance()->getDBConfig();
 	$cfg->set_model_directory(getcwd().'/app/models');
 	$cfg->set_connections( array(
-				'development' => "{$_cfg->type}://{$_cfg->user}:{$_cfg->password}@{$_cfg->host}/{$_cfg->database}"
+				'development' => "{$_cfg->type}://{$_cfg->user}:{$_cfg->password}@{$_cfg->host}/{$_cfg->database}?charset=utf8"
 			)
 	);
 });

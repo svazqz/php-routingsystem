@@ -12,6 +12,14 @@ abstract class View {
 
 	}
 
+	public function displayContent($method, $data = null) {
+		$this->show($method, $data);
+	}
+
+	public function displayContentArray($method, $data = null) {
+		$this->showDataArray($method, $data);
+	}
+
 	public function show($method, $data = null) {
 		if($data == null) {
 			$this->$method();

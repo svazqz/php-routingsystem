@@ -7,7 +7,7 @@ use Core\Classes as Core;
 class Home extends Core\View {
 
     public function homePage() {
-        $this->render("index");
+        $this->render("index", array("name" => "Sergio"));
     }
 
 }
