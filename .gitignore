@@ -5,3 +5,4 @@ composer.lock
 /app/views/Test.php
 /app/templates/test
 /app/templates/cache
+config.ini
