@@ -13,24 +13,22 @@ To download all the dependencies.
 
 ## Configuration
 
-**PHP-RoutingSystem** uses a mechanisms named *Drivers* (located in core/drivers) to add functionalities to your app. So the configuration must be managed by the *Driver* named **Config.php**. Inside of this file you must set the configuration for your app, such as:
+**PHP-RoutingSystem** uses a mechanisms named *Drivers* (located in core/drivers) to add functionalities to your app. So the configuration must be managed by the *Driver* named **Config.php**. Te configuration driver will load your configuration from "config.ini", file that must be placed in the root of the project, and basically must contain:
 
-```php
-$controller = "test"; //Defines the default controller that will be used by the app.
-
-$dbtype = "mysql"; //Defines the array configuration for database that must be used.
-                    //Currently mysql is the only supported type
+```
+[defaults]
+controller = ""
+[db]
+host = ""
+user = ""
+password = ""
+name = ""
 ```
 
-The DB array configuration looks like:
+If you want to place more configurations you have to define them inside your own section, and they can be accessed:
 
-```php
-"mysql" => array(
-    "host" => "host",
-    "user" => "user",
-    "password" => "pass",
-    "database" => "dbname"
-)
+```
+Drivers\Config::get()->var("section.var", "default");
 ```
 
 ## Controllers
@@ -48,11 +46,11 @@ And fill it with:
 ```php
 <?php
 
-namespace App\Controllers;
+namespace Controllers;
 
-use Core\Classes as Core;
+use Core\Controller as Controller;
 
-class Home extends Core\Controller {
+class Home extends Controller {
 
     public function index() {
         echo "Home page!"
@@ -78,11 +76,11 @@ All the view classes must be placed inside *app/views* folder and every view is 
 ```php
 <?php
 
-namespace App\Views;
+namespace Views;
 
-use Core\Classes as Core;
+use Core\View as View;
 
-class Home extends Core\View {
+class Home extends View {
 
     public function homePage($name) {
         echo "This is the home page!";
