@@ -1,59 +1,47 @@
 <?php
-namespace Core\Drivers;
+namespace Drivers;
 
 class Config {
 	private static $instance = null;
-	private static $controller = "home";
 
-	private static $dbtype = "mysql";
-	private static $database = array(
-		"mysql" => array(
-			"host" => "127.0.0.1",
-			"user" => "root",
-			"password" => "root",
-			"database" => "phproutingsystem"
+	private $enviroment = "local";
+
+	private $enviroments = array(
+		"local" => array(
+			"mainController" => "home",
+			"db_host" => "127.0.0.1",
+			"db_user" => "root",
+			"db_password" => "root",
+			"db_name" => "phproutingsystem"
 		)
 	);
 
-	private function __construct() { }
+	private function __construct($env) {
+		if($env != null) {
+			$this->enviroment = $env;
+		}
+	}
 
 	public function __clone() {
 		trigger_error('Clone no se permite.', E_USER_ERROR);
 	}
 
-	static private $mail = array("method" => "mail", "data" => array());
-
-	public static function getDBConfig() {
-		$dbObj = new \stdClass();
-		$dbObj->type = self::$dbtype;
-
-		foreach (self::$database[self::$dbtype] as $key => $value) {
-			$dbObj->$key = $value;
-		}
-
-		return $dbObj;
-	}
-
-	public static function getAutoloaders() {
-		return self::$autoloaders;
-	}
-
-	public static function getMailConfig() {
-		return self::$mail;
-	}
-
-
-    public static function defaultController() {
-		return self::$controller;
-	}
-
-	public static function getInstance()
-	{
-		if (!isset(self::$instance))
-		{
+	public static function get($env = null) {
+		if (self::$instance == null || $env != null) {
 			$c = __CLASS__;
-			self::$instance = new $c;
+			$instance = new $c($env);
+			if($env != null) {
+				return $instance;
+			}
+			self::$instance = $instance;
 		}
 		return self::$instance;
+	}
+
+	public function var($config_var = "", $default = null) {
+		if(isset($this->enviroments[$this->enviroment][$config_var])) {
+			return $this->enviroments[$this->enviroment][$config_var];
+		}
+		return $default;
 	}
 }

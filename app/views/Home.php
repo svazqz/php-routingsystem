@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Views;
+namespace Views;
 
-use Core\Classes as Core;
+use Core;
 
 class Home extends Core\View {
 

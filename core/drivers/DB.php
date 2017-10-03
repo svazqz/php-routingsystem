@@ -1,10 +1,9 @@
 <?php
+namespace Drivers;
 
-class DB extends Driver\Base {
+class DB {
 	private $n = 0;
-	private static $instance = null;
 	private static $dbm = null;
-
 
 	private static function start() {
 		$cdb = Config::getDBConfig();
@@ -32,17 +31,18 @@ class DB extends Driver\Base {
 			self::$dbm->query('SET NAMES utf8');
 			self::$dbm->query('SELECT convert(cast(convert(content using latin1) as binary) using utf8) AS content');
 		} catch(PDOException $e) {
-	    	echo $e->getMessage();
-	    }
-
+			echo $e->getMessage();
+		}
 	}
 
 	public static function close() {
-		self::$dbm = null;
+		if(self::$dbm != null) {
+			unset(self::$dbm);
+		}
 	}
 
 	public static function execQuery($query = null) {
-		if(!self::$dbm) self::start();
+		if(self::$dbm) self::start();
 		if(!$query) return;
 		try {
 			self::$dbm->beginTransaction();

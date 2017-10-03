@@ -1,11 +1,10 @@
 <?php
 
-namespace Core\Classes;
+namespace Core;
 
-use Core\Interfaces as Core;
+use Interfaces\IController as IController;
 
-
-abstract class Controller implements Core\IController {
+abstract class Controller implements IController {
 
 	public function __construct($components) {
 		switch(count($components)) {

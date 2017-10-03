@@ -1,14 +1,14 @@
 <?php
 
-namespace Core\Classes;
+namespace Core;
 
-use Core\Drivers as Drivers;
+use Drivers\Template as Template;
 
 abstract class View {
 	protected $templateEngine;
 
 	public function __construct() {
-		$this->templateEngine = Drivers\Template::init();
+		$this->templateEngine = Template::init();
 
 	}
 

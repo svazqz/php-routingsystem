@@ -7,11 +7,16 @@ $whoops->pushHandler(new Whoops\Handler\PrettyPageHandler());
 $whoops->register();
 
 ActiveRecord\Config::initialize(function($cfg) {
-	$_cfg = Core\Drivers\Config::getInstance()->getDBConfig();
 	$cfg->set_model_directory(getcwd().'/app/models');
-	$cfg->set_connections( array(
-				'development' => "{$_cfg->type}://{$_cfg->user}:{$_cfg->password}@{$_cfg->host}/{$_cfg->database}?charset=utf8"
-			)
+	$type = Drivers\Config::get()->var("db_type", "mysql");
+	$host = Drivers\Config::get()->var("db_host", "");
+	$user = Drivers\Config::get()->var("db_user", "");
+	$pass = Drivers\Config::get()->var("db_password", "");
+	$name = Drivers\Config::get()->var("db_name", "");
+	$cfg->set_connections(
+		array(
+			'development' => "{$type}://{$user}:{$pass}@{$host}/{$name}?charset=utf8"
+		)
 	);
 });
 
@@ -22,24 +27,20 @@ $URI = str_replace("index.php", "", $URI);
 $URI = str_replace("/", " ", $URI);
 $URI = trim($URI);
 
-if(strlen($URI) > 0) {
-	$components = explode(" ", $URI);
-} else {
-	$components = array();
-}
-
+$components = (strlen($URI) > 0) ? explode(" ", $URI) : array();
+$main_controller = Drivers\Config::get()->var("mainController", "");
 switch(count($components)) {
 	case 0:
-		$_classController = "App\\Controllers\\".ucfirst(Core\Drivers\Config::getInstance()->defaultController());
+		$_classController = "Controllers\\".ucfirst($main_controller);
 		$controller = new $_classController(null);
 		break;
 	default:
-		$_classController = "App\\Controllers\\".ucfirst($components[0]);
+		$_classController = "Controllers\\".ucfirst($components[0]);
 		if(class_exists($_classController)) {
 			$components = array_slice($components, 1);
 			$controller = new $_classController($components);
 		} else {
-			$_classController = "App\\Controllers\\".ucfirst(Core\Drivers\Config::getInstance()->defaultController());
+			$_classController = "Controllers\\".ucfirst($main_controller);
 			$controller = new $_classController($components);
 		}
 		break;

@@ -1,14 +1,19 @@
 <?php
-namespace Core\Drivers;
+namespace Core;
 
-class Base
-{
+abstract class Driver {
 	public static $instance;
-	
-	private function __construct()
-	{
-		//Constructor generico
+
+
+	public function __clone() {
+		trigger_error('Clone no se permite.', E_USER_ERROR);
 	}
 
-	
+	public static function init() {
+		if (!isset(self::$instance)) {
+			$c = __CLASS__;
+			self::$instance = new $c;
+		}
+		return self::$instance;
+	}
 }
