@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Controllers;
+namespace Controllers;
 
-use Core\Classes as Core;
-use Models as Model;
+use Core;
+use Models;
 
 class Home extends Core\Controller {
 
@@ -12,11 +12,15 @@ class Home extends Core\Controller {
         $mView->show("homePage");
     }
 
+    public function test($var = "ok", $var2 = "ok") {
+        echo $var." ".$var2;
+    }
+
     public function testModel() {
-        $test =  new Model\Sample();
-        $test->username = "dj_shuy";
-        $test->name = "Jesus";
-        $test->lastname = "Martinez";
+        $test =  new Models\Test();
+        $test->username = "shequito";
+        $test->name = "Sergio";
+        $test->lastname = "Vázquez";
         $test->save();
     }
 

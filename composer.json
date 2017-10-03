@@ -1,12 +1,13 @@
 {
     "autoload": {
         "psr-4": {
-            "Core\\": "core/",
-            "Core\\Handlers\\": "core/handlers/",
-            "Core\\Drivers\\": "core/drivers/",
-            "App\\Controllers\\": "app/controllers",
-            "App\\Views\\": "app/views",
-            "Models\\": "app/models"
+            "Core\\": "core/classes",
+            "Interfaces\\": "core/interfaces",
+            "Drivers\\": "core/drivers/",
+
+            "Models\\": "app/models",
+            "Views\\": "app/views",
+            "Controllers\\": "app/controllers"
         }
     },
     "require": {

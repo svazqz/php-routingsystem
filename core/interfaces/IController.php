@@ -1,6 +1,6 @@
 <?php
 
-namespace Core\Interfaces;
+namespace Interfaces;
 
 interface IController {
     public function index();

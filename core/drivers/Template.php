@@ -1,10 +1,8 @@
 <?php
 
-namespace Core\Drivers;
+namespace Drivers;
 
-use Core\Interfaces as Core;
-
-class Template implements Core\IDriver {
+class Template {
 
     private static $instance = null;
 
@@ -23,11 +21,11 @@ class Template implements Core\IDriver {
         $this->twig = new \Twig_Environment($this->loader);
     }
 
-	public function __clone() {
-		trigger_error('Not allowed.', E_USER_ERROR);
+    public function __clone() {
+		trigger_error('Clone no se permite.', E_USER_ERROR);
 	}
 
-    public static function init() {
+	public static function init() {
 		if (!isset(self::$instance)) {
 			$c = __CLASS__;
 			self::$instance = new $c;
