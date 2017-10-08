@@ -10,6 +10,7 @@
 * <a href="#controllers">Controllers</a>
 * <a href="#views">Views</a>
 * <a href="#models">Models</a>
+* <a href="#donate">Donate</a>
 
 ## Installation
 
