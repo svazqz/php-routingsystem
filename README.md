@@ -1,6 +1,6 @@
 # PHP-RoutingSystem | PHP Framework for MVC pattern implementation
 
-##Index
+## Index
 * <a href="#installation">Installation</a>
 * <a href="#configuration">Configuration</a>
     * <a href="#configuration-file">Configuration file</a>
