@@ -1,5 +1,16 @@
 # PHP-RoutingSystem | PHP Framework for MVC pattern implementation
 
+##Index
+* <a href="#installation">Installation</a>
+* <a href="#configuration">Configuration</a>
+    * <a href="#configuration-file">Configuration file</a>
+    * <a href="#friendly-urls">Friendly URLs</a>
+        * <a href="#apache">Apache</a>
+* <a href="#url-mapping">URL Mapping</a>
+* <a href="#controllers">Controllers</a>
+* <a href="#views">Views</a>
+* <a href="#models">Models</a>
+
 ## Installation
 
 **PHP-RoutingSystem** requires PHP 5.3+ and its only dependencies (at this moment) are defined in the *composer.json* file.
@@ -12,6 +23,8 @@ composer install
 To download all the dependencies.
 
 ## Configuration
+
+### Configuration file
 
 **PHP-RoutingSystem** uses a mechanisms named *Drivers* (located in core/drivers) to add functionalities to your app. So the configuration must be managed by the *Driver* named **Config.php**. Te configuration driver will load your configuration from "config.ini", file that must be placed in the root of the project, and basically must contain:
 
@@ -30,6 +43,43 @@ If you want to place more configurations you have to define them inside your own
 ```
 Drivers\Config::get()->var("section.var", "default");
 ```
+
+### Friendly URLs
+
+#### Apache
+```
+#.htaccess
+<IfModule mod_rewrite.c>
+	Options -MultiViews
+	Options +FollowSymLinks
+	RewriteEngine On
+</IfModule>
+
+<IfModule mod_rewrite.c>
+	ReWriteBase /
+	RewriteRule ^static - [L]
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteRule ^(.*)$ index.php?$1 [L]
+</IfModule>
+```
+
+#### Nginx
+
+Pending...
+
+## URL Mapping
+
+In **PHP-RoutingSystem** every url will be mapped to a controller following the next patterns:
+
+- http://yourdomain.com/ (default controller, index method)
+
+- http://yourdomain.com/method1 (default controller, method1)
+- http://yourdomain.com/method1/arg1/... (default controller, method1 with args)
+
+- http://yourdomain.com/controller1 (controller1, index method)
+- http://yourdomain.com/controller1/method1 (controller1, method1)
+- http://yourdomain.com/controller/method/arg1/{arg2}/... (controller1, method1 with args)
 
 ## Controllers
 
@@ -156,15 +206,7 @@ class User extends ActiveRecord\Model {
 }
 ```
 
-## URL Mapping
 
-In **PHP-RoutingSystem** every url will be mapped to a controller following the next patterns:
+## Donate
 
-- http://yourdomain.com/ (default controller, index method)
-
-- http://yourdomain.com/method1 (default controller, method1)
-- http://yourdomain.com/method1/arg1/... (default controller, method1 with args)
-
-- http://yourdomain.com/controller1 (controller1, index method)
-- http://yourdomain.com/controller1/method1 (controller1, method1)
-- http://yourdomain.com/controller/method/arg1/{arg2}/... (controller1, method1 with args)
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=FDXA3CAML9EF2)
