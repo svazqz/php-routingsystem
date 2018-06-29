@@ -1,4 +1,4 @@
-composer.lock
+/composer.lock
 /vendor
 /app/controllers/Test.php
 /app/models/Test.php
