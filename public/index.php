@@ -1,23 +1,25 @@
 <?php
 chdir("..");
+
+// Code ...
 $loader = require getcwd() . '/vendor/autoload.php';
 
-Drivers\Config::init();
+Config::init();
 
-$Config = Drivers\Config::get();
+$Config = Config::get();
 
 $whoops = new Whoops\Run();
 $whoops->pushHandler(new Whoops\Handler\PrettyPageHandler());
 $whoops->register();
 
 ActiveRecord\Config::initialize(function($cfg) {
-	$Config = Drivers\Config::get();
+	$Config = Config::get();
 	$cfg->set_model_directory(getcwd().'/app/models');
-	$type = $Config->var("db.type", "mysql");
-	$host = $Config->var("db.host", "");
-	$user = $Config->var("db.user", "");
-	$pass = $Config->var("db.password", "");
-	$name = $Config->var("db.name", "");
+	$type = $Config->getVar("db.type", "mysql");
+	$host = $Config->getVar("db.host", "");
+	$user = $Config->getVar("db.user", "");
+	$pass = $Config->getVar("db.password", "");
+	$name = $Config->getVar("db.name", "");
 	$cfg->set_connections(
 		array(
 			'development' => "{$type}://{$user}:{$pass}@{$host}/{$name}?charset=utf8"
@@ -33,11 +35,11 @@ $URI = str_replace("/", " ", $URI);
 $URI = trim($URI);
 
 $components = (strlen($URI) > 0) ? explode(" ", $URI) : array();
-$main_controller = $Config->var("defaults.controller", "");
+$main_controller = $Config->getVar("defaults.controller", "");
 switch(count($components)) {
 	case 0:
 		$_classController = "Controllers\\".ucfirst($main_controller);
-		$controller = new $_classController(null);
+		$controller = new $_classController();
 		break;
 	default:
 		$_classController = "Controllers\\".ucfirst($components[0]);
@@ -50,3 +52,4 @@ switch(count($components)) {
 		}
 		break;
 }
+
