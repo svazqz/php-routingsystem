@@ -2,12 +2,11 @@
 
 namespace Views;
 
-use Core;
-
-class Home extends Core\View {
+class Home {
 
     public function homePage() {
-        $this->render("index", array("name" => "Sergio"));
+        //$this->render("index", array("name" => "Sergio"));
+        echo \Input::getVar("name", "Beto");
     }
 
 }

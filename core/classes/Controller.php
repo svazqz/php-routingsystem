@@ -2,44 +2,32 @@
 
 namespace Core;
 
-use Interfaces\IController as IController;
+use Interfaces;
 
-abstract class Controller implements IController {
+abstract class Controller implements Interfaces\IController {
+	protected $view = null;
 
-	public function __construct($components) {
-		switch(count($components)) {
-			case 0:
-				$this->index();
-				break;
-			default:
-				$method = $components[0];
-				if(method_exists($this, $method)) {
-					$components = array_slice($components, 1);
-					if(count($components) > 0) {
-						call_user_func_array(array($this, $method), $components);
-					} else {
-						$this->$method();
-					}
-				} else {
-					$this->index($components);
-				}
-				break;
+	public function __construct($components = array()) {
+		if(count($components) == 0) {
+			$this->main();
+		} else {
+			$method = $components[0];
+			$components = array_slice($components, 1);
+			call_user_func_array(array($this, $method), $components);
 		}
+		
 	}
 
-	public function getView($viewClass = null) {
-		if($viewClass == null) {
+	public function getView() {
+		if($this->view == null) {
 			$viewClass = str_replace("Controller", "View", get_class($this));
-		} else {
-			$viewClass = 'App\\Views\\'.ucfirst(strtolower($viewClass));
+			try {
+				$this->view = new $viewClass();
+			} catch(Exeption $e) {
+	
+			}
 		}
-
-		try {
-			$view = new $viewClass();
-			return $view;
-		} catch(Exeption $e) {
-
-		}
+		return $this->view;
 	}
 
 }

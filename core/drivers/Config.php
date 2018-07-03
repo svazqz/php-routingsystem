@@ -1,5 +1,4 @@
 <?php
-namespace Drivers;
 
 class Config {
 	private static $instance = null;
@@ -24,7 +23,7 @@ class Config {
 		return self::$instance;
 	}
 
-	public function var($config_var = "", $default = null) {
+	public function getVar($config_var = "", $default = null) {
 		$sections = explode(".", $config_var);
 		if(count($sections) > 1) {
 			return (isset($this->config[$sections[0]][$sections[1]])) ? $this->config[$sections[0]][$sections[1]] : $default;

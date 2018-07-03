@@ -7,13 +7,16 @@ use Models;
 
 class Home extends Core\Controller {
 
-    public function index() {
-        $mView = $this->getView();
-        $mView->show("homePage");
+    public function main($n = "Sergio") {
+        \View::renderHTML("home/index", array("name" => $n));
     }
 
     public function test($var = "ok", $var2 = "ok") {
         echo $var." ".$var2;
+    }
+
+    public function testView() {
+        $this->getView()->homePage();
     }
 
     public function testModel() {

@@ -3,5 +3,5 @@
 namespace Interfaces;
 
 interface IController {
-    public function index();
+    public function main();
 }
