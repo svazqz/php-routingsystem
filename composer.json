@@ -7,7 +7,8 @@
             "Interfaces\\": "core/interfaces",
             "Models\\": "app/models",
             "Views\\": "app/views",
-            "Controllers\\": "app/controllers"
+            "Controllers\\": "app/controllers",
+            "Controllers\\API\\": "app/controllers/api"
         },
         "classmap": [
             "core/drivers/Auth.php",

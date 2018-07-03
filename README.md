@@ -74,16 +74,30 @@ Pending...
 
 In **PHP-RoutingSystem** every url will be mapped to a controller following the next patterns:
 
-- http://yourdomain.com/ (default controller, index method)
+### Common controllers
+- http://yourdomain.com/ (default controller, main method)
 
-- http://yourdomain.com/method1 (default controller, method1)
-- http://yourdomain.com/method1/arg1/... (default controller, method1 with args)
-
-- http://yourdomain.com/controller1 (controller1, index method)
+- http://yourdomain.com/controller1 (controller1, main method)
 - http://yourdomain.com/controller1/method1 (controller1, method1)
-- http://yourdomain.com/controller/method/arg1/{arg2}/... (controller1, method1 with args)
+- http://yourdomain.com/controller/method/arg1/arg2/... (controller1, method1 with args)
+
+### API controllers
+
+The API controllers follow a RESTFUL pattern, so an API controller will have method that represents a HTTP verb directly. The verbs and methods are:
+
+* GET => show
+* POST => create
+* PUT => update
+* DELETE => delete
+
+The way that an url is mapped for API controllers is made using the word "api" on the url. i.e.
+
+* http://yourdomain.com/api/controller1 (Access to API Controller1 on the corresponding method that is related with the HTTP verb used for the request)
+* http://yourdomain.com/api/controller1/arg1/arg2 (Access to API Controller1 on the corresponding method that is related with the HTTP verb used for the request, passing the args as parammeters for that method)
 
 ## Controllers
+
+### Common
 
 All the controllers must be located in *app/controllers* folder, following the next convention:
 
@@ -100,9 +114,10 @@ And fill it with:
 
 namespace Controllers;
 
-use Core\Controller as Controller;
+use Core;
+use Models;
 
-class Home extends Controller {
+class Home extends Core\Controller {
 
     public function index() {
         echo "Home page!"
@@ -119,32 +134,68 @@ http://youredomain.com/home
 
 This url will automatically launch the index method in the controller, and you will see the content that you print inside of it.
 
+### API
+
+The API controllers must be located on the *api* folder inside the *app/controllers* folder. And the structure for a new  API controller is:
+
+```php
+<?php
+
+namespace Controllers\API;
+
+use Core;
+use Models;
+
+class Example extends Core\APIController {
+    public function show() {
+        
+    }
+    public function create() {
+        
+    }
+    public function create() {
+        
+    }
+    public function delete() {
+        
+    }
+}
+
+```
+
+Note: It is not neccessary to define all methods, only those that are going to be used.
+
 ## Views
+
+###Templates
 
 **PHP-RoutingSystem** uses Twig as its template engine, but it's already integrated inside the framework's flow and file structure.
 
-All the view classes must be placed inside *app/views* folder and every view is linked to a controller (but a view is not required always by the controller). If you create a view class for your *Home* controller it'll look like:
+To make use of this mechanism it is neccessary to create the corresponding template files for each view inside the *app/templates* folder. i.e.
+
+If you want to create a home template you may create a folder named "home" inside templates and then a file named "index.html", and then use:
+
+```php
+\View::renderHTML("home/index", array("var1" => $var1));
+```
+
+So the framework will load the correspondig file and pass the array of vars according the Twig documentation.
+
+### View classes
+
+The framework allow you to create custom view classes wich may be useful to present data in very specific ways. All the view classes must be placed inside *app/views* folder and every view is linked to a controller. If you create a view class for your *Home* controller it'll look like:
 
 ```php
 <?php
 
 namespace Views;
 
-use Core\View as View;
-
-class Home extends View {
+class Home {
 
     public function homePage($name) {
         echo "This is the home page!";
     }
 
-    public function hello($name) {
-        echo "Hello ". $name;
-    }
-
-    public function helloArray($data) {
-        $this->render("test", $data);
-    }
 }
 ```
 
@@ -157,37 +208,7 @@ $mView = $this->getView();
 And access the required method from the view with:
 
 ```php
-$mView->show("homePage");
-```
-
-As you can see you can access your view methods and send params to them, this can be done in two different ways:
-
-```php
-//First mode
-$mView->show("hello", array("Sergio")); //Every position in array is an argument in the method
-
-//Second mode
-$mView->showDataArray("helloArray", $array); //The entire array is an argument in the method
-```
-
-### The **render()** method
-Inside a view you can call the method **render()** which will create the template using the Twig template engine, for example:
-
-* If you have created an index template for your home page (that is located in *app/templates/home/index.html*) you can render this (inside of a view method) with:
-
-```php
-$this->render("index", $data);
-```
-where "index" is the name of the file and "$data" is the information that will be passed to the template (following the Twig documentation).
-
-The render method can be used to display templates out of the namespace of the actual view and different formats such as: html, json or xml. This actions can be done by:
-
-```php
-$this->render($viewLayout, $dataLayout, $viewFormat = "html");
-
-//or
-
-$this->renderExternal($externalSpace, $viewLayout, $dataLayout, $viewFormat = "html");
+$mView->homePage();
 ```
 
 ## Models
