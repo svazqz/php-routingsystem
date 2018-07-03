@@ -1,14 +1,13 @@
 <?php
-namespace Core\Drivers;
 
-use Models;
+use Handlers;
 
 class Session {
 
     private static $instance;
 
     public function __construct() {
-        $session = new sessionHandler();
+        $session = new Handlers\Session();
         session_set_save_handler(array($session, 'open'),
                          array($session, 'close'),
                          array($session, 'read'),
@@ -68,58 +67,6 @@ class Session {
     public static  function close() {
         $s = self::sessionInstance();
         session_destroy();
-    }
-
-}
-
-class SessionHandler{
-
-    protected $table = 'sessions';
-
-    public function open() {
-        return true;
-    }
-
-    public function close() {
-        return true;
-    }
-
-    public function read($id) {
-        $session = Models\Session::find_by_id($id);
-        if( $session ) {
-            return $session->data;
-        } else {
-            return false;
-        }
-    }
-
-    public function write($id, $data) {
-        $session = Models\Session::find_by_id($id);
-        if( $session ){
-            $session->data = $data;
-            $session->save();
-            return true;
-        } else {
-            $session = Models\Session::create(
-                        array(
-                            "id" => $id,
-                            "data" => $data
-                        )
-                    );
-        }
-        return false;
-    }
-
-    public function destroy($id) {
-        $session = Models\Session::find_by_id($id);
-        if( $session )
-            $session->delete();
-        return true;
-    }
-
-    public function gc($max) {
-        $query = sprintf("DELETE FROM %s WHERE `created_at` < '%s'", $this->table, time() - intval($max));
-        return dbDriver::execQuery($query);
     }
 
 }

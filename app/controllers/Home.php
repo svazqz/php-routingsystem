@@ -8,7 +8,7 @@ use Models;
 class Home extends Core\Controller {
 
     public function main($n = "Sergio") {
-        \HTMLView::render("home/index", array("name" => $n));
+        \View::renderHTML("home/index", array("name" => $n));
     }
 
     public function test($var = "ok", $var2 = "ok") {
