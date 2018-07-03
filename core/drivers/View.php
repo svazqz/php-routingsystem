@@ -26,16 +26,16 @@ class View {
         Core\TemplateEngine::render($template.".".$ext, $_data, $type."/".$ext);
     }
 
-    public function renderHTML($template = null, $_data = null) {
-        $this->render($template, $_data);
+    public static function renderHTML($template = null, $_data = null) {
+        self::get()->render($template, $_data);
         
     }
 
-    public function renderJSON($template = null, $_data = null) {
-        $this->render($template, $_data, "application", "json");
+    public static  function renderJSON($template = null, $_data = null) {
+        self::get()->render($template, $_data);
     }
 
-    public function renderXML($template = null, $_data = null) {
-        $this->render($template, $_data, "application", "xml");
+    public static  function renderXML($template = null, $_data = null) {
+        self::get()->render($template, $_data);
     }
 }

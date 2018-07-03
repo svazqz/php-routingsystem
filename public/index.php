@@ -1,8 +1,6 @@
 <?php
 chdir("..");
-
-// Code ...
-$loader = require getcwd() . '/vendor/autoload.php';
+require getcwd() . '/vendor/autoload.php';
 
 Config::init();
 
@@ -35,21 +33,18 @@ $URI = str_replace("/", " ", $URI);
 $URI = trim($URI);
 
 $components = (strlen($URI) > 0) ? explode(" ", $URI) : array();
-$main_controller = $Config->getVar("defaults.controller", "");
-switch(count($components)) {
-	case 0:
-		$_classController = "Controllers\\".ucfirst($main_controller);
-		$controller = new $_classController();
-		break;
-	default:
-		$_classController = "Controllers\\".ucfirst($components[0]);
-		if(class_exists($_classController)) {
-			$components = array_slice($components, 1);
-			$controller = new $_classController($components);
-		} else {
-			$_classController = "Controllers\\".ucfirst($main_controller);
-			$controller = new $_classController($components);
-		}
-		break;
+$namespace = "Controllers\\";
+$controller = $Config->getVar("defaults.controller", "");
+if(count($components) > 0) {
+	$controller = $components[0];
+	if($controller == "api") {
+		$namespace .= "API\\";
+		$controller = $components[1];
+		$components = array_slice($components, 2);
+	} else {
+		$components = array_slice($components, 1);
+	}
+	
 }
-
+$_classController = $namespace.ucfirst($controller);
+$_controller = new $_classController($components);
