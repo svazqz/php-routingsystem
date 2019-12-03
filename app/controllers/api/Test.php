@@ -6,7 +6,6 @@ use Core;
 use Models;
 
 class Test extends Core\APIController {
-    public function show($id = 0) {
-        
-    }
+  public function show($id = 0) {
+  }
 }

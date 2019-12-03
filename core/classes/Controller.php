@@ -15,7 +15,6 @@ abstract class Controller implements Interfaces\IController {
 			$components = array_slice($components, 1);
 			call_user_func_array(array($this, $method), $components);
 		}
-		
 	}
 
 	public function getView() {
@@ -24,7 +23,6 @@ abstract class Controller implements Interfaces\IController {
 			try {
 				$this->view = new $viewClass();
 			} catch(Exeption $e) {
-	
 			}
 		}
 		return $this->view;
