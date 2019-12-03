@@ -7,24 +7,24 @@ use Models;
 
 class Home extends Core\Controller {
 
-    public function main($n = "Sergio") {
-        \View::renderHTML("home/index", array("name" => $n));
-    }
+  public function main($n = "Your Name") {
+    \View::renderHTML("home/index", array("name" => $n));
+  }
 
-    public function test($var = "ok", $var2 = "ok") {
-        echo $var." ".$var2;
-    }
+  public function test($var = "ok", $var2 = "ok") {
+    echo $var." ".$var2;
+  }
 
-    public function testView() {
-        $this->getView()->homePage();
-    }
+  public function testView() {
+    $this->getView()->homePage();
+  }
 
-    public function testModel() {
-        $test =  new Models\Test();
-        $test->username = "shequito";
-        $test->name = "Sergio";
-        $test->lastname = "Vázquez";
-        $test->save();
-    }
+  public function testModel() {
+    $test =  new Models\Test();
+    $test->username = "username";
+    $test->name = "Firstname";
+    $test->lastname = "Lastname";
+    $test->save();
+  }
 
 }

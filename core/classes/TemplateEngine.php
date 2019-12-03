@@ -15,6 +15,6 @@ class TemplateEngine {
         }
 		$twig = new \Twig_Environment($loader);
 		header('Content-Type: '.$type.'; charset=utf-8');
-    	$twig->display($template, $data);
+		$twig->display($template, $data);
 	}
 }
