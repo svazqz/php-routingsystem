@@ -11,15 +11,12 @@ class Config {
 		trigger_error('Clone no se permite.', E_USER_ERROR);
 	}
 
-	public static function init() {
+	public static function get() {
 		if (self::$instance == null) {
 			$c = __CLASS__;
 			$instance = new $c();
 			self::$instance = $instance;
 		}
-	}
-
-	public static function get() {
 		return self::$instance;
 	}
 

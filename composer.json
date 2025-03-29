@@ -8,7 +8,8 @@
             "Models\\": "app/models",
             "Views\\": "app/views",
             "Controllers\\": "app/controllers",
-            "Controllers\\API\\": "app/controllers/api"
+            "Controllers\\API\\": "app/controllers/api",
+            "Services\\": "app/services"
         },
         "classmap": [
             "core/drivers/Auth.php",
@@ -21,7 +22,7 @@
     },
     "require": {
         "filp/whoops": "2.*",
-        "php-activerecord/php-activerecord": "1.*",
-        "twig/twig": "~1.20|~2.0"
+        "twig/twig": "~1.20|~2.0",
+        "guzzlehttp/guzzle": "^7.0"
     }
 }

@@ -1,0 +1,17 @@
+{
+  "name": "dashboard",
+  "version": "1.0.0",
+  "description": "A lightweight dashboard designed to repurpose old iPads into smart display frames. Shows time, weather, and customizable backgrounds while maintaining compatibility with first-generation iPads.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@awmottaz/prettier-plugin-void-html": "^1.8.0",
+    "@volar-plugins/prettyhtml": "^2.0.0",
+    "prettier": "^3.5.3"
+  }
+}
