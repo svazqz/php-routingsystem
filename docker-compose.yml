@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  composer:
+    image: composer:2.5
+    command: install
+    volumes:
+      - .:/app
+  web:
+    build: .
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www
+      - ./public:/var/www/html
+    environment:
+      - APACHE_DOCUMENT_ROOT=/var/www/html
+      - TZ=America/Mexico_City
+    restart: unless-stopped
+  

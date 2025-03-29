@@ -3,28 +3,16 @@
 namespace Controllers;
 
 use Core;
-use Models;
+use Services\DemoService;
 
 class Home extends Core\Controller {
+    private $demoService;
+    public function __construct(DemoService $demoService) {
+        $this->demoService = $demoService;
+    }
 
-  public function main($n = "Your Name") {
-    \View::renderHTML("home/index", array("name" => $n));
-  }
-
-  public function test($var = "ok", $var2 = "ok") {
-    echo $var." ".$var2;
-  }
-
-  public function testView() {
-    $this->getView()->homePage();
-  }
-
-  public function testModel() {
-    $test =  new Models\Test();
-    $test->username = "username";
-    $test->name = "Firstname";
-    $test->lastname = "Lastname";
-    $test->save();
-  }
-
+    public function main() {
+        // ToDo: Have auto complete for view methods
+        $this->getView()->postsPage($this->demoService->getPosts());
+    }
 }
